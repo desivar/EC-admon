@@ -1,5 +1,4 @@
-
-
+// backend/server.js (Example - check your file)
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -10,12 +9,13 @@ require('dotenv').config();
 connectDB();
 app.use(express.json());
 
-app.use('/api/auth', userRoutes); // This should come BEFORE the app.get('/')
+app.use('/api/auth', userRoutes); // Make sure this is BEFORE app.get('/')
 
 app.get('/', (req, res) => {
-    res.send('Welcome to the English Connect Backend!'); // Or 'Hello World!' if that's what you have
+    res.send('Hello, World!');
 });
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
+
