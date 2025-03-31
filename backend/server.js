@@ -1,11 +1,13 @@
-const http = require('http');
+const express = require('express');
+const app = express();
 const port = 3000;
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Hello, World!');
+// Define your routes and middleware here
+
+app.get('/', (req, res) => {
+  res.send('Hello World from Express!');
 });
 
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`); // This line is important
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
