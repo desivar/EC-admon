@@ -1,11 +1,25 @@
+
+
+// backend/server.js
 const express = require('express');
 const app = express();
 const port = 3000;
+const connectDB = require('./config/database');
+const userRoutes = require('./routes/userRoutes');
+const englishConnect1Routes = require('./routes/englishConnect1Routes');
+const englishConnect2Routes = require('./routes/englishConnect2Routes');
+const englishConnect3Routes = require('./routes/englishConnect3Routes');
 
-// Define your routes and middleware here
+connectDB();
+app.use(express.json());
+
+app.use('/api/auth', userRoutes);
+app.use('/api/englishconnect1', englishConnect1Routes);
+app.use('/api/englishconnect2', englishConnect2Routes);
+app.use('/api/englishconnect3', englishConnect3Routes);
 
 app.get('/', (req, res) => {
-  res.send('Hello World from Express!');
+  res.send('Welcome to the English Connect Backend!');
 });
 
 app.listen(port, () => {
