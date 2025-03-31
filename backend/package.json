@@ -1,0 +1,21 @@
+{
+  "name": "ec-admon",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/desivar/EC-admon#readme",
+  "bugs": {
+    "url": "https://github.com/desivar/EC-admon/issues"
+  },
+  "repository": {
+    "type": "commonjs",
+    "url": "git+https://github.com/desivar/EC-admon.git"
+  },
+  "license": "ISC",
+  "author": "Desire Vargas, Jacob Bejarano, Cesar Gomez, Henry Emediong",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  }
+}
