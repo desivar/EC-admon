@@ -20,6 +20,8 @@
   },
   "keywords": [],
   "dependencies": {
-    "express": "^5.1.0"
+    "bcrypt": "^5.1.1",
+    "express": "^5.1.0",
+    "mongoose": "^8.13.1"
   }
 }
