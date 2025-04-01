@@ -3,8 +3,10 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
 exports.registerUser = async (req, res) => {
+  console.log('Received registration request:', req.body); // Log the request body
+
   try {
-    const { role, firstName, lastName, email, password } = req.body;
+    const { role, firstName, lastName, email, password, assignedStake } = req.body; // Include assignedStake here
 
     // Check if the email is already registered
     const existingUser = await User.findOne({ email });
@@ -18,15 +20,18 @@ exports.registerUser = async (req, res) => {
       firstName,
       lastName,
       email,
-      password, // Password will be automatically hashed by the pre-save middleware
+      password,
+      assignedStake: assignedStake // Use the assignedStake from req.body
     });
 
-    // Save the new user to the database
-    await newUser.save();
+    console.log('New user object created:', newUser); // Log the new user object before saving
 
+    const savedUser = await newUser.save();
+    console.log('User saved successfully:', savedUser);
     res.status(201).json({ message: 'Account created successfully' }); // 201 Created status
   } catch (error) {
     console.error('Error during user registration:', error);
+    console.error('Error stack:', error.stack); // Log the error stack
     res.status(500).json({ message: 'Failed to create account' }); // 500 Internal Server Error
   }
 };
