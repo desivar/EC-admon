@@ -7,7 +7,7 @@ router.post('/register', userController.registerUser); // This is the crucial li
 
 // You can keep this GET route for testing if you want
 router.get('/register', (req, res) => {
-    res.send('Hit the register GET route!');
+    res.send('Hit the register GET route!');
 });
 
 module.exports = router;
