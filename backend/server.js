@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const connectDB = require('./config/database');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/user.routes');
 console.log('userRoutes object:', userRoutes); // ADD THIS LINE
 const englishConnect1Routes = require('./routes/englishConnect1Routes');
 const englishConnect2Routes = require('./routes/englishConnect2Routes');
