@@ -1,33 +1,17 @@
-// backend/server.js
 console.log('Starting server...');
 const express = require('express');
 const app = express();
 const port = 3000;
 const connectDB = require('./config/database');
-const userRoutes = require('./routes/userRoutes');
-const englishConnectRoutes1 = require('./routes/englishConnectRoutes1');
-const englishConnectRoutes2 = require('./routes/englishConnectRoutes2');
-const englishConnectRoutes3 = require('./routes/englishConnectRoutes3');
-const stakeRoutes = require('./routes/stakeRoutes'); // Import stake routes
+const stakeRoutes = require('./routes/stakeRoutes');
+// const testRoutes = require('./routes/testRoutes'); // If you kept this
 
 require('dotenv').config();
 connectDB();
 app.use(express.json());
 
-console.log('Type of userRoutes:', typeof userRoutes);
-console.log('userRoutes object:', userRoutes);
-app.use('/api/auth', userRoutes);
-app.use('/api/englishconnect/1', englishConnectRoutes1);
-app.use('/api/englishconnect/2', englishConnectRoutes2);
-app.use('/api/englishconnect/3', englishConnectRoutes3);
-
-// Temporarily define a simple POST route here
-app.post('/test-stake', (req, res) => {
-    console.log('Received POST to /test-stake', req.body);
-    res.status(201).json({ message: 'Test POST successful', data: req.body });
-});
-
 app.use('/api/stakes', stakeRoutes);
+// app.use('/test', testRoutes); // If you kept this
 
 app.get('/', (req, res) => {
     res.send('Welcome to the English Connect Backend!');
