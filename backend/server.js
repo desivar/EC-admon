@@ -1,21 +1,26 @@
-// backend/server.js (Example - check your file)
 const express = require('express');
 const app = express();
 const port = 3000;
 const connectDB = require('./config/database');
 const userRoutes = require('./routes/userRoutes');
+const englishConnect1Routes = require('./routes/englishConnect1Routes');
+const englishConnect2Routes = require('./routes/englishConnect2Routes');
+const englishConnect3Routes = require('./routes/englishConnect3Routes');
 
 require('dotenv').config();
 connectDB();
 app.use(express.json());
 
-app.use('/api/auth', userRoutes); // Make sure this is BEFORE app.get('/')
+console.log('Type of userRoutes:', typeof userRoutes); // Add this line
+app.use('/api/auth', userRoutes);
+app.use('/api/englishconnect1', englishConnect1Routes);
+app.use('/api/englishconnect2', englishConnect2Routes);
+app.use('/api/englishconnect3', englishConnect3Routes);
 
 app.get('/', (req, res) => {
-    res.send('Hello, World!');
+    res.send('Welcome to the English Connect Backend!');
 });
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
-
