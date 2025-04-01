@@ -21,7 +21,12 @@ app.use('/api/englishconnect/1', englishConnectRoutes1);
 app.use('/api/englishconnect/2', englishConnectRoutes2);
 app.use('/api/englishconnect/3', englishConnectRoutes3);
 
-// Place the stake routes here, after importing and before your app.listen()
+// Temporarily define a simple POST route here
+app.post('/test-stake', (req, res) => {
+    console.log('Received POST to /test-stake', req.body);
+    res.status(201).json({ message: 'Test POST successful', data: req.body });
+});
+
 app.use('/api/stakes', stakeRoutes);
 
 app.get('/', (req, res) => {
