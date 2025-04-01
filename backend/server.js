@@ -7,6 +7,7 @@ const userRoutes = require('./routes/userRoutes');
 const englishConnectRoutes1 = require('./routes/englishConnectRoutes1');
 const englishConnectRoutes2 = require('./routes/englishConnectRoutes2');
 const englishConnectRoutes3 = require('./routes/englishConnectRoutes3');
+const stakeRoutes = require('./routes/stakeRoutes');
 
 require('dotenv').config();
 connectDB();
