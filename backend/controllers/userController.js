@@ -2,7 +2,7 @@ exports.registerUser = async (req, res) => {
   console.log('Received registration request:', req.body);
 
   try {
-    const { role, firstName, lastName, email, password, assignedStake } = req.body;
+    const { role, firstName, lastName, email, password } = req.body; // Destructure without assignedStake
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -15,7 +15,7 @@ exports.registerUser = async (req, res) => {
       lastName,
       email,
       password,
-      assignedStake: assignedStake
+      // We are intentionally not setting assignedStake here for now
     });
 
     console.log('New user object created:', newUser);
