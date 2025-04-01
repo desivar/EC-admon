@@ -1,8 +1,4 @@
-const express = require('express');
-const router = express.Router();
-
-router.get('/test', (req, res) => {
-    res.send('Test route hit!');
-});
-
-module.exports = router;
+const testRoutes = require('./routes/testRoutes.js');
+console.log('Type of testRoutes:', typeof testRoutes);
+console.log('testRoutes object:', testRoutes);
+app.use('/api/test', testRoutes);
