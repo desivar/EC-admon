@@ -4,6 +4,6 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 
 // Route for user registration (account creation)
-router.post('/register', userController.registerUser);
-
-module.exports = router;
+router.get('/register', (req, res) => {
+    res.send('Hit the register GET route!');
+});
