@@ -4,14 +4,14 @@ const app = express();
 const port = 3000;
 const connectDB = require('./config/database');
 const stakeRoutes = require('./routes/stakeRoutes');
-// const testRoutes = require('./routes/testRoutes'); // If you kept this
+
 
 require('dotenv').config();
 connectDB();
 app.use(express.json());
 
 app.use('/api/stakes', stakeRoutes);
-// app.use('/test', testRoutes); // If you kept this
+
 
 app.get('/', (req, res) => {
     res.send('Welcome to the English Connect Backend!');
