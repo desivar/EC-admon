@@ -1,9 +1,10 @@
-console.log('Starting server...'); // Add this at the very top
+console.log('Starting server...');
 const express = require('express');
 const app = express();
 const port = 3000;
 const connectDB = require('./config/database');
 const userRoutes = require('./routes/userRoutes');
+console.log('userRoutes object:', userRoutes); // ADD THIS LINE
 const englishConnect1Routes = require('./routes/englishConnect1Routes');
 const englishConnect2Routes = require('./routes/englishConnect2Routes');
 const englishConnect3Routes = require('./routes/englishConnect3Routes');
