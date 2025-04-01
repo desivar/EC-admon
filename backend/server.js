@@ -4,9 +4,9 @@ const app = express();
 const port = 3000;
 const connectDB = require('./config/database');
 const userRoutes = require('./routes/userRoutes');
-const englishConnect1Routes = require('./routes/englishConnect1Routes');
-const englishConnect2Routes = require('./routes/englishConnect2Routes');
-const englishConnect3Routes = require('./routes/englishConnect3Routes');
+const englishConnectRoutes1 = require('./routes/englishConnectRoutes1');
+const englishConnectRoutes2 = require('./routes/englishConnectRoutes2');
+const englishConnectRoutes3 = require('./routes/englishConnectRoutes3');
 
 require('dotenv').config();
 connectDB();
@@ -15,9 +15,9 @@ app.use(express.json());
 console.log('Type of userRoutes:', typeof userRoutes);
 console.log('userRoutes object:', userRoutes);
 app.use('/api/auth', userRoutes);
-app.use('/api/englishconnect1', englishConnect1Routes);
-app.use('/api/englishconnect2', englishConnect2Routes);
-app.use('/api/englishconnect3', englishConnect3Routes);
+app.use('/api/englishconnect/1', englishConnectRoutes1);
+app.use('/api/englishconnect/2', englishConnectRoutes2);
+app.use('/api/englishconnect/3', englishConnectRoutes3);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the English Connect Backend!');
