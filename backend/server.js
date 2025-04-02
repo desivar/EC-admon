@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use('/api/stakes', stakeRoutes); // Mount stake routes at /api/stakes
 app.use('/api/users', userRoutes);
-app.use('/testwards', wardRoutes);
+app.use('/api/wards', wardRoutes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the English Connect Backend!');
