@@ -7,7 +7,7 @@ exports.registerUser = async (req, res) => {
     console.log('Received registration request:', req.body);
 
     try {
-        const { role, firstName, lastName, email, password } = req.body; // Destructure without assignedStake
+      const { role, name, email, password } = req.body; // Destructure with name
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
