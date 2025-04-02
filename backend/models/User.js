@@ -1,42 +1,34 @@
-// backend/models/User.js
-const mongoose = require('mongoose');
-
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
+const UserSchema = new Schema({
+  role: {
+      type: String,
+      enum: ['stakeleader', 'wardleader', 'teacher', 'student'],
+      required: true,
+  },
+  name: { // <--- Check this field
+      type: String,
+      required: true, // <--- This must be true
+      trim: true,
   },
   email: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
-    lowercase: true,
-    match: [/.+@.+\..+/, 'Please enter a valid email address'],
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+      lowercase: true,
   },
   password: {
-    type: String,
-    required: true,
-    minlength: 6,
+      type: String,
+      required: true,
+      select: false, // Don't return password by default
+      minlength: 6,
   },
-  role: {
-    type: String,
-    enum: ['student', 'teacher', 'stakeleader', 'wardleader'],
-    default: 'student',
-  },
+  // ... other fields
   createdAt: {
-    type: Date,
-    default: Date.now,
+      type: Date,
+      default: Date.now,
   },
   updatedAt: {
-    type: Date,
-    default: Date.now,
+      type: Date,
+      default: Date.now,
   },
-  // You might add other fields later, e.g., phoneNumber, enrolledClasses, taughtClasses
 });
-
-const User = mongoose.model('User', UserSchema);
-
-module.exports = User;
