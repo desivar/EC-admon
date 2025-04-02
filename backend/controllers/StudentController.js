@@ -1,13 +1,32 @@
 const Student = require('../models/Student');
-const Ward = require('../models/Ward'); // Assuming you'll want to validate the ward
+const Ward = require('../models/Ward');
 
 exports.createStudent = async (req, res) => {
     try {
-        // Logic to create a new student
-        res.status(201).json({ message: 'Student created successfully' });
+        const { name, contactNumber, ward } = req.body;
+
+        if (!name || !ward) {
+            return res.status(400).json({ message: 'Name and ward are required.' });
+        }
+
+        const wardExists = await Ward.findById(ward);
+        if (!wardExists) {
+            return res.status(400).json({ message: 'Invalid ward ID.' });
+        }
+
+        const newStudent = new Student({
+            name,
+            contactNumber,
+            ward
+        });
+
+        const savedStudent = await newStudent.save();
+
+        res.status(201).json({ message: 'Student created successfully', student: savedStudent });
+
     } catch (error) {
         console.error('Error creating student:', error);
-        res.status(500).json({ message: 'Failed to create student' });
+        res.status(500).json({ message: 'Failed to create student', error: error.message });
     }
 };
 
