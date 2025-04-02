@@ -12,6 +12,7 @@ router.get('/', StakeController.getAllStakes);
 // Route to assign a Stake Leader to a stake
 router.put('/:stakeId/assign-leader', StakeController.assignStakeLeader);
 
-// You can add more routes here for getting a specific stake, updating, deleting, etc.
+// Route to add a teacher to a stake
+router.put('/:stakeId/add-teacher', StakeController.addTeacherToStake);
 
 module.exports = router;
