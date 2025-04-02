@@ -93,6 +93,37 @@ exports.addTeacherToStake = async (req, res) => {
         res.status(500).json({ message: 'Failed to add teacher to stake' });
     }
 };
+// ADD THE NEW FUNCTION HERE:
+exports.removeTeacherFromStake = async (req, res) => {
+    const { stakeId } = req.params;
+    const { teacherId } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(stakeId) || !mongoose.Types.ObjectId.isValid(teacherId)) {
+        return res.status(400).json({ message: 'Invalid Stake ID or Teacher ID' });
+    }
+
+    try {
+        const stake = await Stake.findById(stakeId);
+        if (!stake) {
+            return res.status(404).json({ message: 'Stake not found' });
+        }
+
+        // Check if the teacher is in the stake
+        const teacherIndex = stake.teachers.indexOf(teacherId);
+        if (teacherIndex === -1) {
+            return res.status(400).json({ message: 'Teacher not found in this stake' });
+        }
+
+        stake.teachers.splice(teacherIndex, 1); // Remove the teacher ID from the array
+        const updatedStake = await stake.save();
+
+        res.status(200).json({ message: 'Teacher removed from stake successfully', stake: updatedStake });
+
+    } catch (error) {
+        console.error('Error removing teacher from stake:', error);
+        res.status(500).json({ message: 'Failed to remove teacher from stake' });
+    }
+};
 
 exports.getAllStakes = async (req, res) => {
     try {

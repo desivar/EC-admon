@@ -14,5 +14,7 @@ router.put('/:stakeId/assign-leader', StakeController.assignStakeLeader);
 
 // Route to add a teacher to a stake
 router.put('/:stakeId/add-teacher', StakeController.addTeacherToStake);
+// Route to remove a teacher from a stake
+router.put('/:stakeId/remove-teacher', StakeController.removeTeacherFromStake);
 
 module.exports = router;
