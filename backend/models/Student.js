@@ -16,20 +16,20 @@ const studentSchema = new Schema({
         ref: 'Ward',
         required: true
     },
-    // Progress Tracking for EnglishConnect Courses
+    // Progress Tracking for EnglishConnect Courses (Updated for checklist)
     englishConnect1Progress: {
-        attendance: { type: Number, default: 0 },
-        homeworkCompleted: { type: Number, default: 0 },
+        attendedLessons: [{ type: Number, min: 1, max: 25 }],
+        homeworkCompletedLessons: [{ type: Number, min: 1, max: 25 }],
         passed: { type: Boolean, default: false }
     },
     englishConnect2Progress: {
-        attendance: { type: Number, default: 0 },
-        homeworkCompleted: { type: Number, default: 0 },
+        attendedLessons: [{ type: Number, min: 26, max: 50 }],
+        homeworkCompletedLessons: [{ type: Number, min: 26, max: 50 }],
         passed: { type: Boolean, default: false }
     },
     englishConnect3Progress: {
-        attendance: { type: Number, default: 0 },
-        homeworkCompleted: { type: Number, default: 0 },
+        attendedLessons: [{ type: Number, min: 51, max: 57 }],
+        homeworkCompletedLessons: [{ type: Number, min: 51, max: 57 }],
         passed: { type: Boolean, default: false }
     },
     // Optional: Reference to the teacher(s) currently instructing the student
