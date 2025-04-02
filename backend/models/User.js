@@ -7,9 +7,9 @@ const UserSchema = new Schema({
         enum: ['stakeleader', 'wardleader', 'teacher', 'student'],
         required: true,
     },
-    name: { // <--- Check this field
+    name: {
         type: String,
-        required: true, // <--- This must be true
+        required: true,
         trim: true,
     },
     email: {
@@ -25,7 +25,18 @@ const UserSchema = new Schema({
         select: false, // Don't return password by default
         minlength: 6,
     },
-    // ... other fields
+    stake: {
+        type: Schema.Types.ObjectId,
+        ref: 'Stake',
+        required: true, // All users (leaders and teachers) will belong to a stake
+    },
+    ward: {
+        type: Schema.Types.ObjectId,
+        ref: 'Ward',
+        required: function() {
+            return this.role === 'teacher' || this.role === 'wardleader';
+        },
+    },
     createdAt: {
         type: Date,
         default: Date.now,
