@@ -1,28 +1,24 @@
 const Ward = require('../models/Ward');
-const Stake = require('../models/Stake'); // Assuming you might want to verify the stake
+const Stake = require('../models/Stake');
 
 exports.createWard = async (req, res) => {
     try {
-        const { name, stakeId } = req.body; // Expecting ward name and the Stake ID in the request body
+        const { name, stakeId } = req.body;
 
-        // Basic input validation
         if (!name || !stakeId) {
             return res.status(400).json({ message: 'Ward name and Stake ID are required.' });
         }
 
-        // Verify if the Stake exists (optional, but recommended for data integrity)
         const stakeExists = await Stake.findById(stakeId);
         if (!stakeExists) {
             return res.status(404).json({ message: 'Stake not found.' });
         }
 
-        // Create a new Ward document
         const newWard = new Ward({
             name,
             stake: stakeId,
         });
 
-        // Save the new ward to the database
         const savedWard = await newWard.save();
 
         res.status(201).json({ message: 'Ward created successfully', ward: savedWard });
@@ -33,6 +29,56 @@ exports.createWard = async (req, res) => {
     }
 };
 
-// You'll add more controller functions here later (e.g., getAllWards)
+exports.updateWard = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, stakeId } = req.body;
+
+        if (!name && !stakeId) {
+            return res.status(400).json({ message: 'At least one field (name or stakeId) is required to update.' });
+        }
+
+        if (stakeId) {
+            const stakeExists = await Stake.findById(stakeId);
+            if (!stakeExists) {
+                return res.status(404).json({ message: 'Stake not found.' });
+            }
+        }
+
+        const updatedWard = await Ward.findByIdAndUpdate(
+            id,
+            { name, stake: stakeId },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedWard) {
+            return res.status(404).json({ message: 'Ward not found.' });
+        }
+
+        res.status(200).json({ message: 'Ward updated successfully', ward: updatedWard });
+
+    } catch (error) {
+        console.error('Error updating ward:', error);
+        res.status(500).json({ message: 'Failed to update ward' });
+    }
+};
+
+exports.deleteWard = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deletedWard = await Ward.findByIdAndDelete(id);
+
+        if (!deletedWard) {
+            return res.status(404).json({ message: 'Ward not found.' });
+        }
+
+        res.status(200).json({ message: 'Ward deleted successfully' });
+
+    } catch (error) {
+        console.error('Error deleting ward:', error);
+        res.status(500).json({ message: 'Failed to delete ward' });
+    }
+};
 
 module.exports = exports;
