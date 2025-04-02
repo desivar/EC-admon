@@ -1,7 +1,7 @@
 console.log('Starting server...');
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // Use process.env.PORT for deployment
 const connectDB = require('./config/database');
 const stakeRoutes = require('./routes/stakeRoutes'); // Import stake routes
 const userRoutes = require('./routes/userRoutes');
@@ -11,9 +11,10 @@ require('dotenv').config();
 connectDB();
 app.use(express.json());
 
-app.use('/api/stakes', stakeRoutes); // Mount stake routes at /api/stakes
+// Mount routes
 app.use('/api/users', userRoutes);
-app.use('/api/wards', wardRoutes); // Mount ward routes at /api/wards
+app.use('/api/stakes', stakeRoutes); // Mount stake routes at /api/stakes
+app.use('/api/wards', wardRoutes);   // Mount ward routes at /api/wards
 
 app.get('/', (req, res) => {
     res.send('Welcome to the English Connect Backend!');
