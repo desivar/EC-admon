@@ -1,7 +1,7 @@
 // backend/routes/englishConnect2Routes.js
 const express = require('express');
 const router = express.Router();
-const englishConnect1Controller = require('../controllers/englishConnect1Controller');
+const englishConnect2Controller = require('../controllers/englishConnect2Controller');
 
 // Example routes for EnglishConnect 2
 router.post('/attendance', englishConnect1Controller.checkAttendance);
