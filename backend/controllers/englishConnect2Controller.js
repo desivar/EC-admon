@@ -15,7 +15,7 @@ exports.checkEC2Attendance = async (req, res) => {
         }
 
         student.englishConnect2Progress.attendance = (student.englishConnect2Progress.attendance || 0) + 1;
-        await student.save();
+        await checkEC2PassStatus(student); // Check and update pass status
         res.json(student.englishConnect2Progress);
 
     } catch (error) {
@@ -39,7 +39,7 @@ exports.checkEC2Homework = async (req, res) => {
         }
 
         student.englishConnect2Progress.homeworkCompleted = (student.englishConnect2Progress.homeworkCompleted || 0) + 1;
-        await student.save();
+        await checkEC2PassStatus(student); // Check and update pass status
         res.json(student.englishConnect2Progress);
 
     } catch (error) {
@@ -47,3 +47,23 @@ exports.checkEC2Homework = async (req, res) => {
         res.status(500).json({ message: 'Failed to update homework' });
     }
 };
+
+async function checkEC2PassStatus(student) {
+    const totalLessons = 25;
+    const requiredPercentage = 0.8;
+    const requiredAttendance = Math.ceil(totalLessons * requiredPercentage);
+    const requiredHomework = Math.ceil(totalLessons * requiredPercentage);
+
+    const attendanceMet = (student.englishConnect2Progress.attendance || 0) >= requiredAttendance;
+    const homeworkMet = (student.englishConnect2Progress.homeworkCompleted || 0) >= requiredHomework;
+
+    if (attendanceMet && homeworkMet && !student.englishConnect2Progress.passed) {
+        student.englishConnect2Progress.passed = true;
+        await student.save();
+        console.log(`Student ${student.name} passed EnglishConnect 2!`);
+        // TODO: Trigger WhatsApp message here
+    } else if ((!attendanceMet || !homeworkMet) && student.englishConnect2Progress.passed) {
+        student.englishConnect2Progress.passed = false; // Revert if criteria no longer met (optional logic)
+        await student.save();
+    }
+}
