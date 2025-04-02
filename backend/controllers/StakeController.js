@@ -55,6 +55,45 @@ exports.assignStakeLeader = async (req, res) => {
     }
 };
 
+exports.addTeacherToStake = async (req, res) => {
+    const { stakeId } = req.params;
+    const { teacherId } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(stakeId) || !mongoose.Types.ObjectId.isValid(teacherId)) {
+        return res.status(400).json({ message: 'Invalid Stake ID or Teacher ID' });
+    }
+
+    try {
+        const stake = await Stake.findById(stakeId);
+        if (!stake) {
+            return res.status(404).json({ message: 'Stake not found' });
+        }
+
+        const teacher = await User.findById(teacherId);
+        if (!teacher) {
+            return res.status(404).json({ message: 'Teacher not found' });
+        }
+
+        if (teacher.role !== 'teacher') {
+            return res.status(400).json({ message: 'User is not a teacher' });
+        }
+
+        // Check if the teacher is already in the stake
+        if (stake.teachers.includes(teacherId)) {
+            return res.status(400).json({ message: 'Teacher is already assigned to this stake' });
+        }
+
+        stake.teachers.push(teacherId);
+        const updatedStake = await stake.save();
+
+        res.status(200).json({ message: 'Teacher added to stake successfully', stake: updatedStake });
+
+    } catch (error) {
+        console.error('Error adding teacher to stake:', error);
+        res.status(500).json({ message: 'Failed to add teacher to stake' });
+    }
+};
+
 exports.getAllStakes = async (req, res) => {
     try {
         const stakes = await Stake.find();
