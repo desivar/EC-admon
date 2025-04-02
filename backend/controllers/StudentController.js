@@ -32,21 +32,28 @@ exports.createStudent = async (req, res) => {
 
 exports.getAllStudents = async (req, res) => {
     try {
-        // Logic to get all students
-        res.status(200).json([]);
+        const students = await Student.find().populate('ward'); // <--- ADD THIS LINE
+        res.status(200).json(students);                       // <--- AND THIS LINE
     } catch (error) {
         console.error('Error getting all students:', error);
-        res.status(500).json({ message: 'Failed to get students' });
+        res.status(500).json({ message: 'Failed to get students', error: error.message });
     }
 };
 
 exports.getStudentById = async (req, res) => {
     try {
-        // Logic to get a student by ID
-        res.status(200).json({});
+        const { id } = req.params;
+        const student = await Student.findById(id).populate('ward').populate('teachers'); // <--- ADD THIS LINE
+        if (!student) {
+            return res.status(404).json({ message: 'Student not found.' }); // <--- AND THIS LINE
+        }
+        res.status(200).json(student);                                         // <--- AND THIS LINE
     } catch (error) {
         console.error('Error getting student by ID:', error);
-        res.status(500).json({ message: 'Failed to get student' });
+        if (error.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid student ID format.' }); // <--- AND THIS LINE
+        }
+        res.status(500).json({ message: 'Failed to get student', error: error.message }); // <--- AND THIS LINE
     }
 };
 
