@@ -55,4 +55,14 @@ exports.assignStakeLeader = async (req, res) => {
     }
 };
 
-// You might have other functions here as well (e.g., getAllStakes)
+exports.getAllStakes = async (req, res) => {
+    try {
+        const stakes = await Stake.find();
+        res.status(200).json(stakes);
+    } catch (error) {
+        console.error('Error getting all stakes:', error);
+        res.status(500).json({ message: 'Failed to retrieve stakes' });
+    }
+};
+
+module.exports = exports;
