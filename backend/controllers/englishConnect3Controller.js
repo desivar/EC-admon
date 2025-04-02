@@ -14,8 +14,14 @@ exports.checkEC3Attendance = async (req, res) => {
             return res.status(404).json({ message: 'Student not found' });
         }
 
-        student.englishConnect3Progress.attendance = (student.englishConnect3Progress.attendance || 0) + 1;
-        await checkEC3PassStatus(student); // Check and update pass status
+        const attendedLessons = student.englishConnect3Progress.attendedLessons || [];
+        if (!attendedLessons.includes(lessonNumber)) {
+            attendedLessons.push(lessonNumber);
+            student.englishConnect3Progress.attendedLessons = attendedLessons;
+            await checkEC3PassStatus(student); // Recalculate pass status
+            await student.save();
+        }
+
         res.json(student.englishConnect3Progress);
 
     } catch (error) {
@@ -38,8 +44,14 @@ exports.checkEC3Homework = async (req, res) => {
             return res.status(404).json({ message: 'Student not found' });
         }
 
-        student.englishConnect3Progress.homeworkCompleted = (student.englishConnect3Progress.homeworkCompleted || 0) + 1;
-        await checkEC3PassStatus(student); // Check and update pass status
+        const homeworkCompletedLessons = student.englishConnect3Progress.homeworkCompletedLessons || [];
+        if (!homeworkCompletedLessons.includes(lessonNumber)) {
+            homeworkCompletedLessons.push(lessonNumber);
+            student.englishConnect3Progress.homeworkCompletedLessons = homeworkCompletedLessons;
+            await checkEC3PassStatus(student); // Recalculate pass status
+            await student.save();
+        }
+
         res.json(student.englishConnect3Progress);
 
     } catch (error) {
@@ -50,20 +62,19 @@ exports.checkEC3Homework = async (req, res) => {
 
 async function checkEC3PassStatus(student) {
     const totalLessons = 7;
-    const requiredPercentage = 0.8;
-    const requiredAttendance = Math.ceil(totalLessons * requiredPercentage);
-    const requiredHomework = Math.ceil(totalLessons * requiredPercentage);
+    const attendanceCount = (student.englishConnect3Progress.attendedLessons || []).length;
+    const homeworkCount = (student.englishConnect3Progress.homeworkCompletedLessons || []).length;
 
-    const attendanceMet = (student.englishConnect3Progress.attendance || 0) >= requiredAttendance;
-    const homeworkMet = (student.englishConnect3Progress.homeworkCompleted || 0) >= requiredHomework;
+    const attendancePercentage = attendanceCount / totalLessons;
+    const homeworkPercentage = homeworkCount / totalLessons;
 
-    if (attendanceMet && homeworkMet && !student.englishConnect3Progress.passed) {
+    if (attendancePercentage >= 0.8 && homeworkPercentage >= 0.8 && !student.englishConnect3Progress.passed) {
         student.englishConnect3Progress.passed = true;
         await student.save();
         console.log(`Student ${student.name} passed EnglishConnect 3!`);
         // TODO: Trigger WhatsApp message here
-    } else if ((!attendanceMet || !homeworkMet) && student.englishConnect3Progress.passed) {
-        student.englishConnect3Progress.passed = false; // Revert if criteria no longer met (optional logic)
+    } else if ((attendancePercentage < 0.8 || homeworkPercentage < 0.8) && student.englishConnect3Progress.passed) {
+        student.englishConnect3Progress.passed = false;
         await student.save();
     }
 }
