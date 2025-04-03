@@ -20,13 +20,12 @@ app.use('/api/stakes', stakeRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/wards', wardRoutes);
 app.use('/api/teachers', teacherRoutes);
+app.use('/api/students', studentRoutes); // Base route for students (for basic student CRUD)
 
-app.use('/api/students', studentRoutes); // Base route for students
-
-// Mount EnglishConnect routes under /api/students
-app.use('/api/students', englishConnect1Routes);
-app.use('/api/students', englishConnect2Routes);
-app.use('/api/students', englishConnect3Routes);
+// Mount EnglishConnect routes under specific sub-paths of /api/students
+app.use('/api/students/ec1', englishConnect1Routes);
+app.use('/api/students/ec2', englishConnect2Routes);
+app.use('/api/students/ec3', englishConnect3Routes);
 
 app.get('/', (req, res) => {
     res.send('Welcome to the English Connect Backend!');
