@@ -18,7 +18,7 @@ exports.checkEC2Attendance = async (req, res) => {
         if (!attendedLessons.includes(lessonNumber)) {
             attendedLessons.push(lessonNumber);
             student.englishConnect2Progress.attendedLessons = attendedLessons;
-            await checkEC2PassStatus(student); // Recalculate pass status
+            await checkEC2PassStatus(student);
             await student.save();
         }
 
@@ -48,7 +48,7 @@ exports.checkEC2Homework = async (req, res) => {
         if (!homeworkCompletedLessons.includes(lessonNumber)) {
             homeworkCompletedLessons.push(lessonNumber);
             student.englishConnect2Progress.homeworkCompletedLessons = homeworkCompletedLessons;
-            await checkEC2PassStatus(student); // Recalculate pass status
+            await checkEC2PassStatus(student);
             await student.save();
         }
 
@@ -61,7 +61,7 @@ exports.checkEC2Homework = async (req, res) => {
 };
 
 async function checkEC2PassStatus(student) {
-    const totalLessons = 25;
+    const totalLessons = 25; // EC2 has lessons 26-50, so 25 total
     const attendanceCount = (student.englishConnect2Progress.attendedLessons || []).length;
     const homeworkCount = (student.englishConnect2Progress.homeworkCompletedLessons || []).length;
 
@@ -72,7 +72,7 @@ async function checkEC2PassStatus(student) {
         student.englishConnect2Progress.passed = true;
         await student.save();
         console.log(`Student ${student.name} passed EnglishConnect 2!`);
-        // TODO: Trigger WhatsApp message here
+        // TODO: Trigger WhatsApp message here (if needed for EC2)
     } else if ((attendancePercentage < 0.8 || homeworkPercentage < 0.8) && student.englishConnect2Progress.passed) {
         student.englishConnect2Progress.passed = false;
         await student.save();
