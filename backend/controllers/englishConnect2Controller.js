@@ -1,5 +1,5 @@
 const Student = require('../models/Student');
-
+const { sendWhatsAppMessage } = require('../utils/whatsapp');
 exports.checkEC2Attendance = async (req, res) => {
     const { lessonNumber } = req.body;
     const { studentId } = req.params;
