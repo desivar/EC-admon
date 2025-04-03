@@ -1,4 +1,36 @@
 
+const Student = require('../models/Student');
+const { sendWhatsAppMessage } = require('../utils/whatsapp');
+exports.checkEC1Attendance = async (req, res) => {
+    const { lessonNumber } = req.body;
+    const { studentId } = req.params;
+
+    if (lessonNumber < 1 || lessonNumber > 25) {
+        return res.status(400).json({ message: 'Invalid lesson number for EnglishConnect 1 (1-25)' });
+    }
+
+    try {
+        const student = await Student.findById(studentId);
+        if (!student) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
+
+        const attendedLessons = student.englishConnect1Progress.attendedLessons || [];
+        if (!attendedLessons.includes(lessonNumber)) {
+            attendedLessons.push(lessonNumber);
+            student.englishConnect1Progress.attendedLessons = attendedLessons;
+            await checkEC1PassStatus(student);
+            await student.save();
+        }
+
+        res.json(student.englishConnect1Progress);
+
+    } catch (error) {
+        console.error('Error checking EC1 attendance:', error);
+        res.status(500).json({ message: 'Failed to update attendance' });
+    }
+};
+
 exports.checkEC1Homework = async (req, res) => {
     const { lessonNumber } = req.body;
     const { studentId } = req.params;
@@ -17,7 +49,7 @@ exports.checkEC1Homework = async (req, res) => {
         if (!homeworkCompletedLessons.includes(lessonNumber)) {
             homeworkCompletedLessons.push(lessonNumber);
             student.englishConnect1Progress.homeworkCompletedLessons = homeworkCompletedLessons;
-            await checkEC1PassStatus(student); // Recalculate pass status
+            await checkEC1PassStatus(student);
             await student.save();
         }
 
@@ -28,7 +60,6 @@ exports.checkEC1Homework = async (req, res) => {
         res.status(500).json({ message: 'Failed to update homework' });
     }
 };
-
 
 async function checkEC1PassStatus(student) {
     const totalLessons = 25;
