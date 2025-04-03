@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const englishConnect1Controller = require('../controllers/englishConnect1Controller');
+const englishConnect3Controller = require('../controllers/englishConnect3Controller');
 
-router.post('/:studentId/attendance', englishConnect1Controller.checkEC1Attendance);
-router.post('/:studentId/homework', englishConnect1Controller.checkEC1Homework);
+router.post('/:studentId/attendance', englishConnect3Controller.checkEC3Attendance);
+router.post('/:studentId/homework', englishConnect3Controller.checkEC3Homework);
 
 module.exports = router;
