@@ -61,7 +61,7 @@ exports.checkEC3Homework = async (req, res) => {
 };
 
 async function checkEC3PassStatus(student) {
-    const totalLessons = 7; // EC3 has lessons 51-57, so 7 total
+    const totalLessons = 7;
     const attendanceCount = (student.englishConnect3Progress.attendedLessons || []).length;
     const homeworkCount = (student.englishConnect3Progress.homeworkCompletedLessons || []).length;
 
@@ -72,7 +72,14 @@ async function checkEC3PassStatus(student) {
         student.englishConnect3Progress.passed = true;
         await student.save();
         console.log(`Student ${student.name} passed EnglishConnect 3!`);
-        // TODO: Trigger WhatsApp message here (if needed for EC3)
+
+        // Add this block to send the WhatsApp message
+        if (student.contactNumber) {
+            const messageBody = `Congratulations, ${student.name}! You have passed EnglishConnect 3!`;
+            await sendWhatsAppMessage(student.contactNumber, messageBody);
+        } else {
+            console.warn(`Student ${student.name} has no contact number, cannot send WhatsApp message.`);
+        }
     } else if ((attendancePercentage < 0.8 || homeworkPercentage < 0.8) && student.englishConnect3Progress.passed) {
         student.englishConnect3Progress.passed = false;
         await student.save();
